@@ -16,11 +16,12 @@ Regarding the files i added
 4. pyweek_engine.py
 - READ this file pls I left a ton of comments there
 - some additional usefull comments below
-- [u can edit collisions in collisions class (ignore __init__ method thats in the class),
-movement is done in collisions(),
-ignore class Ray_cast_block for now,
-dir_movement is movement but saved in another variable(but a little different, u can ignore),
-last func load_objects() defines what object each symbol in map represents
+- [
+- u can edit collisions in collisions class (ignore __init__ method thats in the class),
+- movement is done in collisions(),
+- ignore class Ray_cast_block for now,
+- dir_movement is movement but saved in another variable(but a little different, u can ignore),
+- last func load_objects() defines what object each symbol in map represents
 ]
 
 
