@@ -22,7 +22,7 @@ Regarding the files i added
 - ignore class Ray_cast_block for now,
 - dir_movement is movement but saved in another variable(but a little different, u can ignore),
 - last func load_objects() defines what object each symbol in map represents
-]
-
+- ]
+\n
 
 - thats it, after 4 just look at sample.py
