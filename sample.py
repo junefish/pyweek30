@@ -7,8 +7,11 @@ from pygame.locals import *
 import random
 import sys
 import math
+from pathlib import Path
 
 # !basic config
+asset_path = Path('assets')
+map_path = asset_path / "maps" / "map0"
 
 pygame.mixer.pre_init(48000, -16, 2, 512)
 pygame.init()
@@ -24,7 +27,6 @@ surface_parameters = (600, 450)
 display = pygame.Surface(surface_parameters)
 pygame.display.set_caption("Circle sky")
 clock = pygame.time.Clock()
-
 
 def sample_level(screenX):
     # !!!!!creating objects to control game
@@ -56,7 +58,7 @@ def sample_level(screenX):
 
     # !!!!!creating map
 
-    game_map = load_map("maps/map0")
+    game_map = load_map(map_path)
 
     # !!!!! loading objects
 
@@ -140,17 +142,14 @@ def setup_map():
     """
     check file : maps/map0
     """ 
-    from pathlib import Path
-    map_path = Path('maps')
-    map_file = map_path / "map0"
 
-    if Path(map_file).is_file():
+    if Path(map_path).is_file():
         pass
     else:
         import zipfile
-        map_zip = Path('maps.zip')
+        map_zip = asset_path / 'maps.zip'
         with zipfile.ZipFile(map_zip, 'r') as zip_ref:
-            zip_ref.extractall(Path("./"))
+            zip_ref.extractall(Path("assets"))
 
 setup_map()
 sample_level(screen)
