@@ -2,7 +2,25 @@
 Team Bung for Pyweek 30 competition
 
 
+## install
 
+### setup (for development)
+```bash
+# First - Fork to your repo
+git clone # your repo
+
+python --version
+# 3.8.x 
+python -m install pipenv
+
+cd pyweek30
+mkdir .venv
+python -m pipenv install
+```
+### run sample
+```
+python -m pipenv run sample
+```
 
 
 Regarding the files i added
