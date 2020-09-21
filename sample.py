@@ -1,10 +1,12 @@
 from ray_cast import *
 from pyweek_engine import *
+
 import pygame
+from pygame.locals import *
+
 import random
 import sys
 import math
-from pygame.locals import *
 
 # !basic config
 
@@ -133,4 +135,22 @@ def sample_level(screenX):
         clock.tick(40)
 
 
+
+def setup_map():
+    """
+    check file : maps/map0
+    """ 
+    from pathlib import Path
+    map_path = Path('maps')
+    map_file = map_path / "map0"
+
+    if Path(map_file).is_file():
+        pass
+    else:
+        import zipfile
+        map_zip = Path('maps.zip')
+        with zipfile.ZipFile(map_zip, 'r') as zip_ref:
+            zip_ref.extractall(Path("./"))
+
+setup_map()
 sample_level(screen)
