@@ -41,7 +41,7 @@ class Rays:
         self.three_halves_pi = round(3 * (math.pi / 2), 6)
         self.display = display
         # ray constants
-        self.ray_render = 20
+        self.ray_render = 25
         self.limit = self.ray_render * 32
         self.ray_width = 5
         self.scaler = 40
@@ -58,15 +58,20 @@ class Rays:
             else:
                 return dist * math.cos(self.two_pi - (angle_of_ray - angle_of_view))
 
-    def cast_rays(self, number_of_rays, starting_ray_angle, Player_mid, game_map, player_angle):
+    def cast_rays(self, number_of_rays, starting_ray_angle, Player_mid, game_map, player_angle, ray_dict):
 
         self.player_angle = round(starting_ray_angle, 4)
         self.rays[0].angle = self.player_angle
 
         for i in range(number_of_rays):
+            first_ray_dist = 1000000
+            second_ray_dist = 1000000
+            first_cords = [0, 0]
+            second_cords = [0, 0]
 
             going = 0
             to_go = 0
+            block_hits = ["0", "0"]
             aTan = round(-1 / math.tan(self.player_angle), 4)
             tan = round(math.tan(self.player_angle), 4)
 
@@ -100,7 +105,7 @@ class Rays:
                     if hit_pos[0] < 0 or hit_pos[1] < 0:
                         raise ValueError('A very specific bad thing happened.')
 
-                    if game_map[hit_pos[1]][hit_pos[0]] == "1":
+                    if game_map[hit_pos[1]][hit_pos[0]] in ["1", "2", "3", "4", "5", "6"]:
                         going = self.ray_render
 
                     else:
@@ -152,7 +157,7 @@ class Rays:
                     if hit_pos0[0] < 0 or hit_pos0[1] < 0:
                         raise ValueError('A very specific bad thing happened.')
 
-                    if game_map[hit_pos0[1]][hit_pos0[0]] == "1":
+                    if game_map[hit_pos0[1]][hit_pos0[0]] in ["1", "2", "3", "4", "5", "6"]:
                         to_go = self.ray_render
 
                     else:
@@ -177,16 +182,43 @@ class Rays:
                     second_ray_dist = self.better_distance(second_ray_dist, self.rays[i].angle, player_angle)
                     self.rays[i].distance = second_ray_dist
                     self.rays[i].final_cords = second_cords
-                    pygame.draw.line(self.display, (0, 0, 200), [(self.ray_width * i), 225],
-                                     [(self.ray_width * i) + self.ray_width, 225],
-                                     int((450/second_ray_dist)*self.scaler))
+
+                    # doing the actual thing, dont know how to name
+                    block_hits[0] = game_map[int(second_cords[1] // 32)][int(second_cords[0] // 32)]
+
+                    if ray_dict[block_hits[0]].image:
+                        slice_of_image = math.floor(second_cords[1] % 32)
+                        height = int((450/second_ray_dist)*self.scaler)
+
+                        self.display.blit(pygame.transform.scale(ray_dict[block_hits[0]].slice_textures[slice_of_image],
+                                                                 [self.ray_width, height]),
+                                          ((self.ray_width * i), 225-(height/2)))
+                    else:
+                        pygame.draw.line(self.display, ray_dict[block_hits[0]].color, [(self.ray_width * i), 225],
+                                         [(self.ray_width * i) + self.ray_width, 225],
+                                         int(((450/second_ray_dist)*self.scaler)))
                 elif second_ray_dist > first_ray_dist:
                     first_ray_dist = self.better_distance(first_ray_dist, self.rays[i].angle, player_angle)
                     self.rays[i].distance = first_ray_dist
                     self.rays[i].final_cords = first_cords
-                    pygame.draw.line(self.display, (0, 200, 200), [(self.ray_width * i), 225],
-                                     [(self.ray_width * i) + self.ray_width, 225],
-                                     int((450/first_ray_dist)*self.scaler))
+
+                    block_hits[1] = game_map[int(first_cords[1] // 32)][int(first_cords[0] // 32)]
+
+                    if ray_dict[block_hits[1]].image:
+                        slice_of_image = math.floor(first_cords[0] % 32)
+                        height = int((450/first_ray_dist)*self.scaler)
+
+                        self.display.blit(pygame.transform.scale(ray_dict[block_hits[1]].slice_textures[slice_of_image],
+                                                                 [self.ray_width, height]),
+                                          ((self.ray_width * i), 225-(height/2)))
+                    else:
+                        new_color = [ray_dict[block_hits[1]].color[x]-20 for x in range(3)]
+                        for c in range(3):
+                            if new_color[c] < 0:
+                                new_color[c] = 0
+                        pygame.draw.line(self.display, new_color, [(self.ray_width * i), 225],
+                                         [(self.ray_width * i) + self.ray_width, 225],
+                                         int((450/first_ray_dist)*self.scaler))
 
             # moving angle
 
@@ -194,5 +226,6 @@ class Rays:
             if self.player_angle > round(self.two_pi, 4):
                 self.player_angle -= round(self.two_pi, 4)
             self.rays[i + 1].angle = round(self.player_angle, 5)
+
 
 # "writing this garbage was pain" Tucan444 2020
