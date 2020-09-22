@@ -136,13 +136,39 @@ class Collisions(Id):
 
 # used to create templates for ray caster
 class Ray_cast_block:
-    def __init__(self, image=False):
+    def __init__(self, image=None, color_key=(0, 0, 0)):
         self.color = (255, 255, 255)
 
         self.pillar = []
         self.texture = image
-        # waiting for slice function from bung
-        self.slice_texture = []
+        self.image = False
+        self.slice_textures = []
+
+        if image is not None:
+            self.texture.set_colorkey(color_key)
+            self.image = True
+            self.slice_it_up()
+
+    def slice_it_up(self):
+        image_slice = self.get_slice_rectangles()
+        for sliceX in image_slice:
+            image1 = pygame.Surface((1, 32)).convert()
+            image1.blit(self.texture, sliceX)
+            self.slice_textures.append(image1)
+
+    @staticmethod
+    def get_slice_rectangles():
+        image_slices = []
+        x = -32
+        y = 0
+        while y <= 32:
+            sliceX = pygame.Rect(x, 0, 32, 32)  # loads one slice of the image at a time.
+            image_slices.append(0)
+            image_slices[y] = sliceX
+            x += 1
+            y += 1
+        del image_slices[0]
+        return image_slices  # [:-1]
 
 
 # next 2 classes are for object class
@@ -257,10 +283,24 @@ def load_objects(game_map, width, height, objects, game):
     x, y = 0, 0
     for line in game_map:
         for obj in line:
-            if obj == "1":
+            # this is just to be efficient normaly u can use elif and put another obj to another num
+            if obj == "1" or obj == "2" or obj == "3":
                 obj = Object("solid", game.custom_id_giver, [x, y], [0, 0], 0, False, [width, height])
                 sort(obj, objects)
                 game.custom_id_giver += 1
             x += width
         y += height
         x = 0
+
+
+# !!!!!!!!!! config this function makes template for ray casting !!!!!!!!!!!!!!
+def get_ray_dictionary():
+    # u can also just define a color, usually u do a texture, pillars are not usable yet(if they'll ever be)
+    blocks = {
+        "0": Ray_cast_block(),
+        "1": Ray_cast_block(pygame.image.load("textures/test_texture.png")),
+        "2": Ray_cast_block(pygame.image.load("textures/test_texture0.png")),
+        "3": Ray_cast_block()
+    }
+    blocks["3"].color = (200, 30, 10)
+    return blocks
