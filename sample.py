@@ -59,7 +59,7 @@ def sample_level(screenX):
 
     # !!!!!creating map
 
-    game_map = load_map(map_path)
+    game_map = load_map("maps/map1")
 
     # !!!!! loading objects
 
