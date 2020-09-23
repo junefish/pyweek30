@@ -222,7 +222,7 @@ class Timers:
 
         # stuff under this is for separate functions
 
-        self.wall_images = load_images("textures/animation", "wall", 5)
+        self.wall_images = load_images("assets/textures/animation1", "wall", 5)
 
     @staticmethod
     def ray_timer_advance(timer, ray_dict):
@@ -350,11 +350,11 @@ def get_ray_dictionary():
     # u can also just define a color, usually u do a texture, pillars are not usable yet(if they'll ever be)
     blocks = {
         "0": Ray_cast_block(),
-        "1": Ray_cast_block(pygame.image.load("textures/test_texture.png")),
-        "2": Ray_cast_block(pygame.image.load("textures/test_texture0.png")),
+        "1": Ray_cast_block(pygame.image.load("assets/textures/test_texture.png")),
+        "2": Ray_cast_block(pygame.image.load("assets/textures/test_texture0.png")),
         "3": Ray_cast_block(),
-        "4": Ray_cast_block(pygame.image.load("textures/test_transparent.png")),
-        "5": Ray_cast_block(pygame.image.load("textures/animation/wall0.png"))
+        "4": Ray_cast_block(pygame.image.load("assets/textures/test_transparent.png")),
+        "5": Ray_cast_block(pygame.image.load("assets/textures/animation1/wall0.png"))
     }
     blocks["3"].color = (200, 30, 10)
     return blocks

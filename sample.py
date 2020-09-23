@@ -11,7 +11,8 @@ from pathlib import Path
 
 # !basic config
 asset_path = Path('assets')
-map_path = asset_path / "maps" / "map0"
+map_path = asset_path / "maps"
+textures_path = asset_path / "textures"
 
 pygame.mixer.pre_init(48000, -16, 2, 512)
 pygame.init()
@@ -60,7 +61,7 @@ def sample_level(screenX):
 
     # !!!!!creating map
 
-    game_map = load_map("maps/map1")
+    game_map = load_map(map_path / "map1")
 
     # !!!!! loading objects
 
@@ -158,18 +159,4 @@ def sample_level(screenX):
         clock.tick(40)
 
 
-def setup_map():
-    """
-    check file : maps/map1
-    """ 
-
-    if Path(map_path).is_file():
-        pass
-    else:
-        import zipfile
-        map_zip = asset_path / 'maps.zip'
-        with zipfile.ZipFile(map_zip, 'r') as zip_ref:
-            zip_ref.extractall(Path("assets"))
-
-setup_map()
 sample_level(screen)
