@@ -34,8 +34,10 @@ class Objects:
         # u add ids of objects u want to delete there is no func to delete for now
 
         self.objects_to_delete = []
-        
-        self.values = {}
+
+        self.values = {
+            "pos_to_del": []
+        }
 
     def do_collisions(self, objects):
         for obj in self.collision_objects:
@@ -46,11 +48,39 @@ class Objects:
             ids.removed_id.append(trash)
         self.objects_to_delete = []
 
+    def del_pos_in_map(self, game_map):
+        for pos in self.values["pos_to_del"]:
+            game_map = game_map_overwrite(game_map, pos, 0)
+        return game_map
+
+    def take_out_trash(self, ids):
+        for obj in self.objects_to_delete:
+            ids.ids_to_remove.append(obj)
+        self.objects_to_delete = []
+
 
 # Id class just stores all ids of all objects
 class Id:
     all_ids = []
     ids_to_remove = []
+
+    def remove_by_id(self, objects):
+        for item in self.ids_to_remove:
+            for obj in objects.game_objects:
+                if obj.object_id == item:
+                    g_index = objects.game_objects.index(obj)
+                    if obj.moving:
+                        m_index = objects.moving_objects.index(obj)
+                        if obj.move.collisions:
+                            c_index = objects.collision_objects.index(obj)
+
+                            del objects.collision_objects[c_index]
+
+                        del objects.moving_objects[m_index]
+
+                    del objects.game_objects[g_index]
+
+        self.ids_to_remove = []
 
 
 # collisions class take care of collision funcs
@@ -91,24 +121,48 @@ class Collisions(Id):
             if obj.type == "player":
                 obj.rect.bottom = self.rect.top
                 obj.object_pos = [obj.rect.x, obj.rect.y]
+        elif self.type == "collectable":
+            if obj.type == "player":
+                objects.values["water"] += 1
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
+                objects.values["pos_to_del"].append(hit_pos)
+                objects.objects_to_delete.append(self.object_id)
 
     def hit_top(self, obj, objects):
         if self.type == "solid":
             if obj.type == "player":
                 obj.rect.top = self.rect.bottom
                 obj.object_pos = [obj.rect.x, obj.rect.y]
+        elif self.type == "collectable":
+            if obj.type == "player":
+                objects.values["water"] += 1
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
+                objects.values["pos_to_del"].append(hit_pos)
+                objects.objects_to_delete.append(self.object_id)
 
     def hit_left(self, obj, objects):
         if self.type == "solid":
             if obj.type == "player":
                 obj.rect.left = self.rect.right
                 obj.object_pos = [obj.rect.x, obj.rect.y]
+        elif self.type == "collectable":
+            if obj.type == "player":
+                objects.values["water"] += 1
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
+                objects.values["pos_to_del"].append(hit_pos)
+                objects.objects_to_delete.append(self.object_id)
 
     def hit_right(self, obj, objects):
         if self.type == "solid":
             if obj.type == "player":
                 obj.rect.right = self.rect.left
                 obj.object_pos = [obj.rect.x, obj.rect.y]
+        elif self.type == "collectable":
+            if obj.type == "player":
+                objects.values["water"] += 1
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
+                objects.values["pos_to_del"].append(hit_pos)
+                objects.objects_to_delete.append(self.object_id)
 
 
 # used to create templates for ray caster
@@ -248,10 +302,10 @@ class Timers:
                 if timer[0].type == "ray_wall_animation":
                     timer[1](timer[0], ray_dict)
 
-                    if timer[0].repeat:
+                    if timer[0].repeat or timer[0].image_number != len(timer[0].extras[1]):
                         timer[0].step = 0
                     else:
-                        self.timers.remove(self.timers.index(timer))
+                        self.timers.remove(self.timers[self.timers.index(timer)])
 
 
 class Timer:
@@ -342,6 +396,10 @@ def load_objects(game_map, width, height, objects, game):
                 obj = Object("solid", game.custom_id_giver, [x, y], [0, 0], 0, False, [width, height])
                 sort(obj, objects)
                 game.custom_id_giver += 1
+            elif obj == "6":
+                obj = Object("collectable", game.custom_id_giver, [x, y], [0, 0], 0, False, [width, height])
+                sort(obj, objects)
+                game.custom_id_giver += 1
             x += width
         y += height
         x = 0
@@ -356,7 +414,13 @@ def get_ray_dictionary():
         "2": Ray_cast_block(pygame.image.load("assets/textures/test_texture0.png")),
         "3": Ray_cast_block(),
         "4": Ray_cast_block(pygame.image.load("assets/textures/test_transparent.png")),
-        "5": Ray_cast_block(pygame.image.load("assets/textures/animation1/wall0.png"))
+        "5": Ray_cast_block(pygame.image.load("assets/textures/animation1/wall0.png")),
+        "6": Ray_cast_block(pygame.image.load("assets/textures/water.png"))
     }
     blocks["3"].color = (200, 30, 10)
     return blocks
+
+
+def game_map_overwrite(game_map, pos, with_what):
+    game_map[pos[0]][pos[1]] = with_what
+    return game_map
