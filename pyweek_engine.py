@@ -9,31 +9,6 @@ from pygame.locals import *
 pygame.init()
 
 
-def distance_indicator_precise(coords1, coords2):
-    x_distance = abs(coords1[0] - coords2[0])
-    y_distance = abs(coords1[1] - coords2[1])
-    distance = math.sqrt((x_distance ** 2) + (y_distance ** 2))
-    return distance
-
-
-def load_images(path, name, number_of_images, file_type=".png"):
-    images = []
-    for i in range(number_of_images):
-        images.append(pygame.image.load("{}/{}_{}{}".format(path, name, i, file_type)).convert())
-    return images
-
-
-def load_map(path):
-    f = open(path, "r")
-    data = f.read()
-    f.close()
-    data = data.split('\n')
-    product = []
-    for line in data:
-        product.append(list(line))
-    return product
-
-
 # has attributes for basic thing in game
 class Game:
     def __init__(self, game_maps=None):
@@ -138,6 +113,7 @@ class Collisions(Id):
 class Ray_cast_block:
     def __init__(self, image=None, color_key=(0, 0, 0)):
         self.color = (255, 255, 255)
+        self.color_key = color_key
 
         self.pillar = []
         self.texture = image
@@ -154,6 +130,7 @@ class Ray_cast_block:
         for sliceX in image_slice:
             image1 = pygame.Surface((1, 32)).convert()
             image1.blit(self.texture, sliceX)
+            image1.set_colorkey(self.color_key)
             self.slice_textures.append(image1)
 
     @staticmethod
@@ -238,6 +215,81 @@ class Object(Collisions):
         self.rect = pygame.Rect(self.object_pos[0], self.object_pos[1], self.size[0], self.size[1])
 
 
+# yes i still havent learned threading so thats that
+class Timers:
+    def __init__(self):
+        self.timers = []
+
+        # stuff under this is for separate functions
+
+        self.wall_images = load_images("textures/animation", "wall", 5)
+
+    @staticmethod
+    def ray_timer_advance(timer, ray_dict):
+        timer.image_number += 1
+
+        ray_dict[timer.extras[0]] = Ray_cast_block(timer.extras[1][timer.image_number % len(timer.extras[1])])
+
+    # with type of timer u decide what to use
+    def add_timer(self, duration, repeat, type_of_timer):
+
+        if type_of_timer == "ray_wall_animation":
+            self.timers.append([Timer(duration, repeat, ["5", self.wall_images], type_of_timer),
+                                self.ray_timer_advance])
+
+    # parameters passed into are for the funcs
+    def add_time(self, ray_dict):
+        for timer in self.timers:
+            timer[0].step += 1
+
+            if timer[0].step == timer[0].duration:
+                if timer[0].type == "ray_wall_animation":
+                    timer[1](timer[0], ray_dict)
+
+                    if timer[0].repeat:
+                        timer[0].step = 0
+                    else:
+                        self.timers.remove(self.timers.index(timer))
+
+
+class Timer:
+    def __init__(self, duration, repeat, extras, type_of_timer):
+        self.duration = duration
+        self.repeat = repeat
+        self.step = 0
+        self.extras = extras
+        self.type = type_of_timer
+
+        # bonus att
+
+        self.image_number = 0
+
+
+def distance_indicator_precise(coords1, coords2):
+    x_distance = abs(coords1[0] - coords2[0])
+    y_distance = abs(coords1[1] - coords2[1])
+    distance = math.sqrt((x_distance ** 2) + (y_distance ** 2))
+    return distance
+
+
+def load_images(path, name, number_of_images, file_type=".png"):
+    images = []
+    for i in range(number_of_images):
+        images.append(pygame.image.load("{}/{}{}{}".format(path, name, i, file_type)).convert())
+    return images
+
+
+def load_map(path):
+    f = open(path, "r")
+    data = f.read()
+    f.close()
+    data = data.split('\n')
+    product = []
+    for line in data:
+        product.append(list(line))
+    return product
+
+
 # next func sorts object into objects class so the objects is stored where it should be
 def sort(obj, objects):
     objects.game_objects.append(obj)
@@ -284,7 +336,7 @@ def load_objects(game_map, width, height, objects, game):
     for line in game_map:
         for obj in line:
             # this is just to be efficient normaly u can use elif and put another obj to another num
-            if obj == "1" or obj == "2" or obj == "3":
+            if obj in ["1", "2", "3", "4", "5"]:
                 obj = Object("solid", game.custom_id_giver, [x, y], [0, 0], 0, False, [width, height])
                 sort(obj, objects)
                 game.custom_id_giver += 1
@@ -300,7 +352,9 @@ def get_ray_dictionary():
         "0": Ray_cast_block(),
         "1": Ray_cast_block(pygame.image.load("textures/test_texture.png")),
         "2": Ray_cast_block(pygame.image.load("textures/test_texture0.png")),
-        "3": Ray_cast_block()
+        "3": Ray_cast_block(),
+        "4": Ray_cast_block(pygame.image.load("textures/test_transparent.png")),
+        "5": Ray_cast_block(pygame.image.load("textures/animation/wall0.png"))
     }
     blocks["3"].color = (200, 30, 10)
     return blocks
