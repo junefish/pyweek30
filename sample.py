@@ -36,6 +36,9 @@ def sample_level(screenX):
 
     game = Game()
     objects = Objects()
+    
+    objects.values["water"] = 0
+    
     ids = Id()
 
     # !!!!!creating player
@@ -80,6 +83,12 @@ def sample_level(screenX):
     # !!!!!game loop
 
     while game.alive:
+        # deleting objects
+
+        game_map = objects.del_pos_in_map(game_map)
+        objects.take_out_trash(ids)
+        ids.remove_by_id(objects)
+
         # bg
 
         display.fill((0, 0, 0))
