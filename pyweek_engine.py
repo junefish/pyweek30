@@ -123,7 +123,7 @@ class Collisions(Id):
                 obj.object_pos = [obj.rect.x, obj.rect.y]
         elif self.type == "collectable":
             if obj.type == "player":
-                objects.values["water"] += 1
+                objects.values["add_water"] = True
                 hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
@@ -135,7 +135,7 @@ class Collisions(Id):
                 obj.object_pos = [obj.rect.x, obj.rect.y]
         elif self.type == "collectable":
             if obj.type == "player":
-                objects.values["water"] += 1
+                objects.values["add_water"] = True
                 hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
@@ -147,7 +147,7 @@ class Collisions(Id):
                 obj.object_pos = [obj.rect.x, obj.rect.y]
         elif self.type == "collectable":
             if obj.type == "player":
-                objects.values["water"] += 1
+                objects.values["add_water"] = True
                 hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
@@ -159,10 +159,11 @@ class Collisions(Id):
                 obj.object_pos = [obj.rect.x, obj.rect.y]
         elif self.type == "collectable":
             if obj.type == "player":
-                objects.values["water"] += 1
+                objects.values["add_water"] = True
                 hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
+
 
 
 # used to create templates for ray caster
