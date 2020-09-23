@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 
 screen_width = 800
-screen_height = 800
+screen_height = 600
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255, 95)
@@ -15,7 +15,7 @@ rectsize=(192, 32)
 end = 0
 menu1 = ["New Game", "High Scores", "About", "Help", "Quit"]
 menu2 = ["Key Bindings", "Resolution"]
-menu3 = ["This game was", "written by a man", "called Bung!"]
+menu3 = ["Written by:", "Bung", "Tucan444", "halfsickofshadows", "Turyam", "and whywhyy", "for pyweek30"]
 menu4 = ["Arrow keys move", "Q is quit", "Esc is menu", "Space is pause"]
 menulen = 0
 menu = menu1
@@ -43,6 +43,11 @@ def dispmenu():
     global disy
     global menulen    
     screen.fill(BLACK)
+    background = pygame.image.load("assets/textures/menu.png").convert()
+    image1 = pygame.Surface((800,  600))
+    image1 = image1.convert()
+    image1.blit(background, (0, 0))
+    screen.blit(image1, (0, 0))
     pygame.display.flip()
     for a in range(len(menu)):
         menulen = a
@@ -89,3 +94,19 @@ while end == 0:
                     end = 1
                 if event.key == pygame.K_RETURN:
                     menulogic()
+            if event.type == pygame.MOUSEMOTION:
+                position = event.pos
+                x = position[0]
+                y = position[1]
+                z = disy
+                if x < 350 or x > 542:
+                    break
+                if y < 300:
+                    break
+                for i in range(len(menu)):
+                    if y >= (300 + (32 * i)) and y <= (300 + (32 * (i + 1))):
+                        selected = i
+                        dispmenu()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                menulogic()
+                
