@@ -29,6 +29,7 @@ pygame.display.set_caption("Circle sky")
 clock = pygame.time.Clock()
 
 
+
 def sample_level(screenX):
     # !!!!!creating objects to control game
 
@@ -55,7 +56,7 @@ def sample_level(screenX):
 
     # !!!!!creating rays
 
-    rays = Rays(Player.direction, 120, display)
+    rays = Rays(Player.direction, 200, display)
 
     # !!!!!creating map
 
@@ -70,6 +71,11 @@ def sample_level(screenX):
 
     ray_dictionary = get_ray_dictionary()
 
+    # timers for animations
+
+    timer = Timers()
+    timer.add_timer(60, True, "ray_wall_animation")
+
     # !!!!!game loop
 
     while game.alive:
@@ -77,6 +83,9 @@ def sample_level(screenX):
 
         display.fill((0, 0, 0))
         pygame.draw.rect(display, (0, 100, 0), (0, 225, 600, 225))
+        pygame.draw.rect(display, (0, 80, 0), (0, 225, 600, 120))
+        pygame.draw.rect(display, (0, 60, 0), (0, 225, 600, 50))
+        pygame.draw.rect(display, (0, 40, 0), (0, 225, 600, 20))
 
         # doing player movement
 
@@ -91,17 +100,13 @@ def sample_level(screenX):
         # casting rays
 
         player_mid = [Player.object_pos[0] + (Player.size[0]/2), Player.object_pos[1] + (Player.size[0]/2)]
-        rays.cast_rays(120, Player.direction, player_mid,
+        rays.cast_rays(200, Player.direction, player_mid,
                        game_map, Player.direction + (Player.move.offset * Player.move.degree), ray_dictionary)
         # for Player_mid argument we must give middle of player
-        '''
-        for i in range(32):
-            display.blit(pygame.transform.scale(ray_dictionary["1"].slice_textures[i], (5, 40)), (100, 100))
 
-            screenX.blit(pygame.transform.scale(display, Window_size), (0, 0))
-            pygame.display.update()
-            time.sleep(0.1)
-        '''
+        # running animations
+
+        timer.add_time(ray_dictionary)
 
         # event loop
 
@@ -151,7 +156,6 @@ def sample_level(screenX):
         screenX.blit(pygame.transform.scale(display, Window_size), (0, 0))
         pygame.display.update()
         clock.tick(40)
-
 
 
 def setup_map():
