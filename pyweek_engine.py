@@ -34,6 +34,8 @@ class Objects:
         # u add ids of objects u want to delete there is no func to delete for now
 
         self.objects_to_delete = []
+        
+        self.values = {}
 
     def do_collisions(self, objects):
         for obj in self.collision_objects:
