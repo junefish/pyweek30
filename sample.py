@@ -38,6 +38,7 @@ def sample_level(screenX):
     objects = Objects()
     
     objects.values["water"] = 0
+    objects.values["add_water"] = False
     
     ids = Id()
 
@@ -102,6 +103,12 @@ def sample_level(screenX):
         Player.movement = Player.move.move(Player.dir_movement)
         Player.direction, Player.dir_movement = Player.move.change_dir(Player.direction, Player.dir_movement,  0.05)
         # second parameter is speed of rotation
+        
+        # adding additional conditions
+
+        if objects.values["add_water"]:
+            objects.values["water"] += 1
+            objects.values["add_water"] = False
 
         # collisions
 
