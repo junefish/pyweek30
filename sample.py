@@ -41,7 +41,7 @@ def sample_level(screenX):
     # !!!!!creating player
 
     # never set direction to 0
-    Player = Object("player", game.custom_id_giver, [50, 50], [0, 0], 0.01, True, [8, 8])
+    Player = Object("player", game.custom_id_giver, [500, 500], [0, 0], 0.01, True, [8, 8])
     Player.move.collisions = True  # enables collisions for player
     Player.move.speed = 5  # increasing speed so ur not super slow
     Player.move.offset = 30  # were creating 120 rays with 0.5 angle difference and we need player offset 30 angles
@@ -61,7 +61,7 @@ def sample_level(screenX):
 
     # !!!!!creating map
 
-    game_map = load_map(map_path / "map1")
+    game_map = load_map(map_path / "bungs_map")
 
     # !!!!! loading objects
 

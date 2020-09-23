@@ -350,7 +350,7 @@ def get_ray_dictionary():
     # u can also just define a color, usually u do a texture, pillars are not usable yet(if they'll ever be)
     blocks = {
         "0": Ray_cast_block(),
-        "1": Ray_cast_block(pygame.image.load("assets/textures/test_texture.png")),
+        "1": Ray_cast_block(pygame.image.load("assets/textures/Wall_Dirt.png")),
         "2": Ray_cast_block(pygame.image.load("assets/textures/test_texture0.png")),
         "3": Ray_cast_block(),
         "4": Ray_cast_block(pygame.image.load("assets/textures/test_transparent.png")),
