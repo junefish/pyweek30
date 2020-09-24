@@ -44,9 +44,8 @@ def sample_level(screenX):
     # !!!!!creating player
 
     # never set direction to 0
-    Player = Object(
-        "player", game.custom_id_giver, [500, 500], [0, 0], 0.01, True, [8, 8]
-    )
+    Player = Object("player", game.custom_id_giver, [500, 500], [0, 0], 0.01,
+                    True, [8, 8])
     Player.move.collisions = True  # enables collisions for player
     Player.move.speed = 5  # increasing speed so ur not super slow
     # were creating 120 rays with 0.5 angle difference and we need player offset 30 angles
@@ -55,8 +54,7 @@ def sample_level(screenX):
 
     # simulating movement so u dont start at speed 0
     Player.dir_movement = Player.move.set_start_dir_movement(
-        Player.direction, Player.dir_movement
-    )
+        Player.direction, Player.dir_movement)
 
     # sorts player
     sort(Player, objects)
@@ -106,8 +104,7 @@ def sample_level(screenX):
 
         Player.movement = Player.move.move(Player.dir_movement)
         Player.direction, Player.dir_movement = Player.move.change_dir(
-            Player.direction, Player.dir_movement, 0.05
-        )
+            Player.direction, Player.dir_movement, 0.05)
         # second parameter is speed of rotation
 
         # adding additional conditions
@@ -161,8 +158,7 @@ def sample_level(screenX):
                         screenX = pygame.display.set_mode(Window_size)
                     else:
                         screenX = pygame.display.set_mode(
-                            Window_size, pygame.FULLSCREEN
-                        )
+                            Window_size, pygame.FULLSCREEN)
 
                 elif event.key == K_d:
                     Player.move.right = True
