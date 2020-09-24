@@ -79,7 +79,8 @@ class Rays:
             # looking up
             if self.player_angle > self.pi:
                 # first ray collision
-                self.rays[i].ray_cords[1] = round(((Player_mid[1] // 32) * 32) - 0.001, 3)
+                self.rays[i].ray_cords[1] = round(
+                    ((Player_mid[1] // 32) * 32) - 0.001, 3)
                 self.rays[i].ray_cords[0] = round(((Player_mid[1] - self.rays[i].ray_cords[1]) * aTan) + Player_mid[0],
                                                   3)
 
@@ -91,7 +92,8 @@ class Rays:
             # looking down
             else:
                 # first ray collision
-                self.rays[i].ray_cords[1] = round(((Player_mid[1] // 32) * 32) + 32, 3)
+                self.rays[i].ray_cords[1] = round(
+                    ((Player_mid[1] // 32) * 32) + 32, 3)
                 self.rays[i].ray_cords[0] = round(((Player_mid[1] - self.rays[i].ray_cords[1]) * aTan) + Player_mid[0],
                                                   3)
 
@@ -102,7 +104,8 @@ class Rays:
 
             # doing the collisions
             while going < self.ray_render:
-                hit_pos = [int(self.rays[i].ray_cords[0] // 32), int(self.rays[i].ray_cords[1] // 32)]
+                hit_pos = [int(self.rays[i].ray_cords[0] // 32),
+                           int(self.rays[i].ray_cords[1] // 32)]
 
                 try:
                     if hit_pos[0] < 0 or hit_pos[1] < 0:
@@ -136,13 +139,15 @@ class Rays:
 
             # saving the dist
 
-            first_ray_dist = distance_indicator_precise(Player_mid, copy.copy(self.rays[i].ray_cords))
+            first_ray_dist = distance_indicator_precise(
+                Player_mid, copy.copy(self.rays[i].ray_cords))
             first_cords = copy.copy(self.rays[i].ray_cords)
 
             # looking right
             if self.player_angle > self.three_halves_pi or self.player_angle < self.half_pi:
                 # first ray collision
-                self.rays[i].ray_cords[0] = round(((Player_mid[0] // 32) * 32) + 32, 3)
+                self.rays[i].ray_cords[0] = round(
+                    ((Player_mid[0] // 32) * 32) + 32, 3)
                 self.rays[i].ray_cords[1] = round(-((Player_mid[0] - self.rays[i].ray_cords[0]) * tan) + Player_mid[1],
                                                   3)
 
@@ -155,7 +160,8 @@ class Rays:
 
             else:
                 # first ray collision
-                self.rays[i].ray_cords[0] = round(((Player_mid[0] // 32) * 32) - 0.001, 3)
+                self.rays[i].ray_cords[0] = round(
+                    ((Player_mid[0] // 32) * 32) - 0.001, 3)
                 self.rays[i].ray_cords[1] = round(-((Player_mid[0] - self.rays[i].ray_cords[0]) * tan) + Player_mid[1],
                                                   3)
 
@@ -167,7 +173,8 @@ class Rays:
             # doing the collisions
 
             while to_go < self.ray_render:
-                hit_pos0 = [int(self.rays[i].ray_cords[0] // 32), int(self.rays[i].ray_cords[1] // 32)]
+                hit_pos0 = [int(self.rays[i].ray_cords[0] // 32),
+                            int(self.rays[i].ray_cords[1] // 32)]
 
                 try:
 
@@ -200,20 +207,23 @@ class Rays:
 
             # saving the dist
 
-            second_ray_dist = distance_indicator_precise(Player_mid, copy.copy(self.rays[i].ray_cords))
+            second_ray_dist = distance_indicator_precise(
+                Player_mid, copy.copy(self.rays[i].ray_cords))
             second_cords = copy.copy(self.rays[i].ray_cords)
 
             # merging them together
 
             if first_ray_dist < self.limit or second_ray_dist < self.limit:
                 if first_ray_dist > second_ray_dist:
-                    second_ray_dist = self.better_distance(second_ray_dist, self.rays[i].angle, player_angle)
+                    second_ray_dist = self.better_distance(
+                        second_ray_dist, self.rays[i].angle, player_angle)
                     self.rays[i].distance = second_ray_dist
                     self.rays[i].final_cords = second_cords
 
                     # doing the actual thing, don't know how to name
 
-                    block_hits[0] = game_map[int(second_cords[1] // 32)][int(second_cords[0] // 32)]
+                    block_hits[0] = game_map[int(
+                        second_cords[1] // 32)][int(second_cords[0] // 32)]
 
                     if ray_dict[block_hits[0]].image:
                         slice_of_image = math.floor(second_cords[1] % 32)
@@ -224,20 +234,23 @@ class Rays:
                                           ((self.ray_width * i), 225 - (height / 2)))
                     else:
                         pygame.draw.line(self.display, ray_dict[block_hits[0]].color, [(self.ray_width * i), 225],
-                                         [(self.ray_width * i) + self.ray_width, 225],
+                                         [(self.ray_width * i) +
+                                          self.ray_width, 225],
                                          int(((450 / second_ray_dist) * self.scaler)))
 
                     self.draw_rays_transparent(transparent_hits, ray_dict, [self.rays[i].angle, player_angle], i,
                                                second_ray_dist)
 
                 elif second_ray_dist > first_ray_dist:
-                    first_ray_dist = self.better_distance(first_ray_dist, self.rays[i].angle, player_angle)
+                    first_ray_dist = self.better_distance(
+                        first_ray_dist, self.rays[i].angle, player_angle)
                     self.rays[i].distance = first_ray_dist
                     self.rays[i].final_cords = first_cords
 
                     # doing the stuff
 
-                    block_hits[1] = game_map[int(first_cords[1] // 32)][int(first_cords[0] // 32)]
+                    block_hits[1] = game_map[int(
+                        first_cords[1] // 32)][int(first_cords[0] // 32)]
 
                     if ray_dict[block_hits[1]].image:
                         slice_of_image = math.floor(first_cords[0] % 32)
@@ -247,12 +260,14 @@ class Rays:
                                                                  [self.ray_width, height]),
                                           ((self.ray_width * i), 225 - (height / 2)))
                     else:
-                        new_color = [ray_dict[block_hits[1]].color[x] - 20 for x in range(3)]
+                        new_color = [ray_dict[block_hits[1]
+                                              ].color[x] - 20 for x in range(3)]
                         for c in range(3):
                             if new_color[c] < 0:
                                 new_color[c] = 0
                         pygame.draw.line(self.display, new_color, [(self.ray_width * i), 225],
-                                         [(self.ray_width * i) + self.ray_width, 225],
+                                         [(self.ray_width * i) +
+                                          self.ray_width, 225],
                                          int((450 / first_ray_dist) * self.scaler))
 
                     self.draw_rays_transparent(transparent_hits, ray_dict, [self.rays[i].angle, player_angle], i,
@@ -285,7 +300,8 @@ class Rays:
                                                              [self.ray_width, height]),
                                       ((self.ray_width * i), 225 - (height / 2)))
                 else:
-                    new_color = [ray_dict[coll[2]].color[x] - 20 for x in range(3)]
+                    new_color = [ray_dict[coll[2]].color[x] -
+                                 20 for x in range(3)]
                     for c in range(3):
                         if new_color[c] < 0:
                             new_color[c] = 0
@@ -307,7 +323,8 @@ class Rays:
 
         for i in range(1, len(all_together)):
             while all_together[i][1] > all_together[i - 1][1] and i > 0:
-                all_together[i], all_together[i - 1] = all_together[i - 1], all_together[i]
+                all_together[i], all_together[i -
+                                              1] = all_together[i - 1], all_together[i]
                 i -= 1
 
         return all_together

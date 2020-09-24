@@ -30,29 +30,31 @@ pygame.display.set_caption("Circle sky")
 clock = pygame.time.Clock()
 
 
-
 def sample_level(screenX):
     # !!!!!creating objects to control game
 
     game = Game()
     objects = Objects()
-    
+
     objects.values["water"] = 0
     objects.values["add_water"] = False
-    
+
     ids = Id()
 
     # !!!!!creating player
 
     # never set direction to 0
-    Player = Object("player", game.custom_id_giver, [500, 500], [0, 0], 0.01, True, [8, 8])
+    Player = Object("player", game.custom_id_giver, [
+                    500, 500], [0, 0], 0.01, True, [8, 8])
     Player.move.collisions = True  # enables collisions for player
     Player.move.speed = 5  # increasing speed so ur not super slow
-    Player.move.offset = 30  # were creating 120 rays with 0.5 angle difference and we need player offset 30 angles
+    # were creating 120 rays with 0.5 angle difference and we need player offset 30 angles
+    Player.move.offset = 30
     # don't try to understand the comment above its just 30 it just is
 
     # simulating movement so u dont start at speed 0
-    Player.dir_movement = Player.move.set_start_dir_movement(Player.direction, Player.dir_movement)
+    Player.dir_movement = Player.move.set_start_dir_movement(
+        Player.direction, Player.dir_movement)
 
     # sorts player
     sort(Player, objects)
@@ -101,9 +103,10 @@ def sample_level(screenX):
         # doing player movement
 
         Player.movement = Player.move.move(Player.dir_movement)
-        Player.direction, Player.dir_movement = Player.move.change_dir(Player.direction, Player.dir_movement,  0.05)
+        Player.direction, Player.dir_movement = Player.move.change_dir(
+            Player.direction, Player.dir_movement,  0.05)
         # second parameter is speed of rotation
-        
+
         # adding additional conditions
 
         if objects.values["add_water"]:
@@ -116,7 +119,8 @@ def sample_level(screenX):
 
         # casting rays
 
-        player_mid = [Player.object_pos[0] + (Player.size[0]/2), Player.object_pos[1] + (Player.size[0]/2)]
+        player_mid = [Player.object_pos[0] +
+                      (Player.size[0]/2), Player.object_pos[1] + (Player.size[0]/2)]
         rays.cast_rays(200, Player.direction, player_mid,
                        game_map, Player.direction + (Player.move.offset * Player.move.degree), ray_dictionary)
         # for Player_mid argument we must give middle of player
@@ -145,7 +149,8 @@ def sample_level(screenX):
                     if game.fs is False:
                         screenX = pygame.display.set_mode(Window_size)
                     else:
-                        screenX = pygame.display.set_mode(Window_size, pygame.FULLSCREEN)
+                        screenX = pygame.display.set_mode(
+                            Window_size, pygame.FULLSCREEN)
 
                 elif event.key == K_d:
                     Player.move.right = True
