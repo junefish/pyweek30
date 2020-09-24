@@ -1,13 +1,13 @@
-from ray_cast import *
-from pyweek_engine import *
+import math
+import random
+import sys
+from pathlib import Path
 
 import pygame
 from pygame.locals import *
 
-import random
-import sys
-import math
-from pathlib import Path
+from pyweek_engine import *
+from ray_cast import *
 
 # !basic config
 asset_path = Path("assets")

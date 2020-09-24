@@ -1,9 +1,10 @@
-import pygame
+import copy
+import math
+import random
 import sys
 import time
-import random
-import math
-import copy
+
+import pygame
 from pygame.locals import *
 
 pygame.init()

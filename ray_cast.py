@@ -1,12 +1,13 @@
-from pyweek_engine import *
-import pygame
+import copy
+import math
+import random
 import sys
 import time
-import random
-import math
-import copy
+
+import pygame
 from pygame.locals import *
 
+from pyweek_engine import *
 
 # important
 # angles move by half a degree
