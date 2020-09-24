@@ -15,8 +15,15 @@ rectsize = (192, 32)
 end = 0
 menu1 = ["New Game", "High Scores", "About", "Help", "Quit"]
 menu2 = ["Key Bindings", "Resolution"]
-menu3 = ["Written by:", "Bung", "Tucan444", "halfsickofshadows",
-         "Turyam", "and whywhyy", "for pyweek30"]
+menu3 = [
+    "Written by:",
+    "Bung",
+    "Tucan444",
+    "halfsickofshadows",
+    "Turyam",
+    "and whywhyy",
+    "for pyweek30",
+]
 menu4 = ["Arrow keys move", "Q is quit", "Esc is menu", "Space is pause"]
 menulen = 0
 menu = menu1
@@ -47,7 +54,7 @@ def dispmenu():
     global menulen
     screen.fill(BLACK)
     background = pygame.image.load("assets/textures/menu.png").convert()
-    image1 = pygame.Surface((800,  600))
+    image1 = pygame.Surface((800, 600))
     image1 = image1.convert()
     image1.blit(background, (0, 0))
     screen.blit(image1, (0, 0))
@@ -55,9 +62,9 @@ def dispmenu():
     for a in range(len(menu)):
         menulen = a
         score1 = str(menu[a]).encode("utf-8").decode("utf-8")
-        disscore = font.render(score1,  True,  RED)
-        screen.blit(disscore,  [350, disy])
-        scorerect = pygame.Rect((350,  disy), (rectsize))
+        disscore = font.render(score1, True, RED)
+        screen.blit(disscore, [350, disy])
+        scorerect = pygame.Rect((350, disy), (rectsize))
         if selected == a and menu == menu1:
             highlight()
         pygame.display.update(scorerect)
@@ -68,7 +75,7 @@ def dispmenu():
 def highlight():
     highlight = pygame.Surface((rectsize), pygame.SRCALPHA)
     pygame.draw.rect(highlight, BLUE, highlight.get_rect(), 0)
-    screen.blit(highlight,  (350, disy))
+    screen.blit(highlight, (350, disy))
 
 
 def up():

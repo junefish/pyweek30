@@ -35,9 +35,7 @@ class Objects:
 
         self.objects_to_delete = []
 
-        self.values = {
-            "pos_to_del": []
-        }
+        self.values = {"pos_to_del": []}
 
     def do_collisions(self, objects):
         for obj in self.collision_objects:
@@ -87,7 +85,6 @@ class Id:
 # !!!!!!!!!! holds init for Object !!!!!!!!!!!!!!!!!!!
 # class purely for inheritance
 class Collisions(Id):
-
     def __init__(self, typeX, object_id, x_y, movement, direction, moving, size):
         self.type = typeX
         self.object_id = object_id
@@ -109,7 +106,8 @@ class Collisions(Id):
             self.move = Moving_Object()
 
         self.rect = pygame.Rect(
-            self.object_pos[0], self.object_pos[1], self.size[0], self.size[1])
+            self.object_pos[0], self.object_pos[1], self.size[0], self.size[1]
+        )
 
     # theres a function for every type of collisions
     # edit collisions here (I added some basic ones just so u can see)
@@ -125,8 +123,7 @@ class Collisions(Id):
         elif self.type == "collectable":
             if obj.type == "player":
                 objects.values["add_water"] = True
-                hit_pos = [int(self.object_pos[1] // 32),
-                           int(self.object_pos[0] // 32)]
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
 
@@ -138,8 +135,7 @@ class Collisions(Id):
         elif self.type == "collectable":
             if obj.type == "player":
                 objects.values["add_water"] = True
-                hit_pos = [int(self.object_pos[1] // 32),
-                           int(self.object_pos[0] // 32)]
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
 
@@ -151,8 +147,7 @@ class Collisions(Id):
         elif self.type == "collectable":
             if obj.type == "player":
                 objects.values["add_water"] = True
-                hit_pos = [int(self.object_pos[1] // 32),
-                           int(self.object_pos[0] // 32)]
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
 
@@ -164,8 +159,7 @@ class Collisions(Id):
         elif self.type == "collectable":
             if obj.type == "player":
                 objects.values["add_water"] = True
-                hit_pos = [int(self.object_pos[1] // 32),
-                           int(self.object_pos[0] // 32)]
+                hit_pos = [int(self.object_pos[1] // 32), int(self.object_pos[0] // 32)]
                 objects.values["pos_to_del"].append(hit_pos)
                 objects.objects_to_delete.append(self.object_id)
 
@@ -247,26 +241,32 @@ class Moving_Object:
             if direction < 0:
                 direction += self.two_pi
             dir_movement[0] = round(
-                math.cos(direction + (self.offset * self.degree)) * self.speed, 2)
+                math.cos(direction + (self.offset * self.degree)) * self.speed, 2
+            )
             dir_movement[1] = round(
-                math.sin(direction + (self.offset * self.degree)) * self.speed, 2)
+                math.sin(direction + (self.offset * self.degree)) * self.speed, 2
+            )
         if self.right:
             direction += angle
             if direction > self.two_pi:
                 direction -= self.two_pi
             dir_movement[0] = round(
-                math.cos(direction + (self.offset * self.degree)) * self.speed, 2)
+                math.cos(direction + (self.offset * self.degree)) * self.speed, 2
+            )
             dir_movement[1] = round(
-                math.sin(direction + (self.offset * self.degree)) * self.speed, 2)
+                math.sin(direction + (self.offset * self.degree)) * self.speed, 2
+            )
 
         return direction, dir_movement
 
     # used for setting things before game loop
     def set_start_dir_movement(self, direction, dir_movement):
         dir_movement[0] = round(
-            math.cos(direction + (self.offset * self.degree)) * self.speed, 2)
+            math.cos(direction + (self.offset * self.degree)) * self.speed, 2
+        )
         dir_movement[1] = round(
-            math.sin(direction + (self.offset * self.degree)) * self.speed, 2)
+            math.sin(direction + (self.offset * self.degree)) * self.speed, 2
+        )
         return dir_movement
 
 
@@ -281,7 +281,8 @@ class Object(Collisions):
     def change_pos(self, x_y):
         self.object_pos = x_y
         self.rect = pygame.Rect(
-            self.object_pos[0], self.object_pos[1], self.size[0], self.size[1])
+            self.object_pos[0], self.object_pos[1], self.size[0], self.size[1]
+        )
 
 
 # yes i still havent learned threading so thats that
@@ -298,14 +299,19 @@ class Timers:
         timer.image_number += 1
 
         ray_dict[timer.extras[0]] = Ray_cast_block(
-            timer.extras[1][timer.image_number % len(timer.extras[1])])
+            timer.extras[1][timer.image_number % len(timer.extras[1])]
+        )
 
     # with type of timer u decide what to use
     def add_timer(self, duration, repeat, type_of_timer):
 
         if type_of_timer == "ray_wall_animation":
-            self.timers.append([Timer(duration, repeat, ["5", self.wall_images], type_of_timer),
-                                self.ray_timer_advance])
+            self.timers.append(
+                [
+                    Timer(duration, repeat, ["5", self.wall_images], type_of_timer),
+                    self.ray_timer_advance,
+                ]
+            )
 
     # parameters passed into are for the funcs
     def add_time(self, ray_dict):
@@ -316,11 +322,12 @@ class Timers:
                 if timer[0].type == "ray_wall_animation":
                     timer[1](timer[0], ray_dict)
 
-                    if timer[0].repeat or timer[0].image_number != len(timer[0].extras[1]):
+                    if timer[0].repeat or timer[0].image_number != len(
+                        timer[0].extras[1]
+                    ):
                         timer[0].step = 0
                     else:
-                        self.timers.remove(
-                            self.timers[self.timers.index(timer)])
+                        self.timers.remove(self.timers[self.timers.index(timer)])
 
 
 class Timer:
@@ -346,8 +353,9 @@ def distance_indicator_precise(coords1, coords2):
 def load_images(path, name, number_of_images, file_type=".png"):
     images = []
     for i in range(number_of_images):
-        images.append(pygame.image.load(
-            "{}/{}{}{}".format(path, name, i, file_type)).convert())
+        images.append(
+            pygame.image.load("{}/{}{}{}".format(path, name, i, file_type)).convert()
+        )
     return images
 
 
@@ -355,7 +363,7 @@ def load_map(path):
     f = open(path, "r")
     data = f.read()
     f.close()
-    data = data.split('\n')
+    data = data.split("\n")
     product = []
     for line in data:
         product.append(list(line))
@@ -409,13 +417,27 @@ def load_objects(game_map, width, height, objects, game):
         for obj in line:
             # this is just to be efficient normaly u can use elif and put another obj to another num
             if obj in ["1", "2", "3", "4", "5"]:
-                obj = Object("solid", game.custom_id_giver, [x, y], [
-                             0, 0], 0, False, [width, height])
+                obj = Object(
+                    "solid",
+                    game.custom_id_giver,
+                    [x, y],
+                    [0, 0],
+                    0,
+                    False,
+                    [width, height],
+                )
                 sort(obj, objects)
                 game.custom_id_giver += 1
             elif obj == "6":
-                obj = Object("collectable", game.custom_id_giver, [
-                             x, y], [0, 0], 0, False, [width, height])
+                obj = Object(
+                    "collectable",
+                    game.custom_id_giver,
+                    [x, y],
+                    [0, 0],
+                    0,
+                    False,
+                    [width, height],
+                )
                 sort(obj, objects)
                 game.custom_id_giver += 1
             x += width
@@ -433,7 +455,7 @@ def get_ray_dictionary():
         "3": Ray_cast_block(),
         "4": Ray_cast_block(pygame.image.load("assets/textures/test_transparent.png")),
         "5": Ray_cast_block(pygame.image.load("assets/textures/animation1/wall0.png")),
-        "6": Ray_cast_block(pygame.image.load("assets/textures/water.png"))
+        "6": Ray_cast_block(pygame.image.load("assets/textures/water.png")),
     }
     blocks["3"].color = (200, 30, 10)
     return blocks
